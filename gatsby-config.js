@@ -21,5 +21,7 @@ module.exports = {
         implementation: require("sass"),
       },
     },
+    `gatsby-plugin-react-helmet`,
   ],
+  pathPrefix: `/step3`,
 };
