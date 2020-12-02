@@ -1,14 +1,24 @@
 import React, { useRef } from "react";
 import { Mesh } from "three";
-import { MeshProps } from "react-three-fiber";
+import { MeshProps, useFrame } from "react-three-fiber";
+import { CharacterDefault } from "./characters/Default";
 
-export function Character(props: MeshProps) {
+export function Character({ who = null, ...props }) {
   const mesh = useRef<Mesh>();
+  const CharModel = () => <CharacterDefault />;
+
+  let direction = 1;
+  useFrame(() => {
+    if (mesh.current.position.x >= 30 || mesh.current.position.x <= -30) {
+      direction *= -1;
+    }
+
+    mesh.current.position.x += 0.2 * direction;
+  });
 
   return (
     <mesh {...props} ref={mesh} castShadow>
-      <cylinderBufferGeometry args={[1, 0.5, 3, 32]} />
-      <meshStandardMaterial color={"orange"} />
+      <CharModel />
     </mesh>
   );
 }
