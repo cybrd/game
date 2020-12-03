@@ -5,6 +5,9 @@ import { useFrame } from "react-three-fiber";
 import { CharacterDefault } from "./characters/Default";
 import { CharacterRed } from "./characters/Red";
 import { CharacterBlue } from "./characters/Blue";
+import { CharacterMcCree } from "./characters/McCree";
+import { CharacterGirl1 } from "./characters/Girl1";
+import { CharacterDeer } from "./characters/Deer";
 
 export function Character({ who = null, ...props }) {
   const thisMesh = createRef<Mesh>();
@@ -17,6 +20,15 @@ export function Character({ who = null, ...props }) {
     case "Blue":
       CharModel = () => <CharacterBlue ref={thisMesh} {...props} />;
       break;
+    case "McCree":
+      CharModel = () => <CharacterMcCree ref={thisMesh} {...props} />;
+      break;
+    case "Girl1":
+      CharModel = () => <CharacterGirl1 ref={thisMesh} {...props} />;
+      break;
+    case "Deer":
+      CharModel = () => <CharacterDeer ref={thisMesh} {...props} />;
+      break;
     default:
       break;
   }
@@ -28,20 +40,22 @@ export function Character({ who = null, ...props }) {
   const speedZ = Math.random() * 0.4;
 
   useFrame(() => {
-    if (
-      thisMesh.current.position.x >= 30 ||
-      thisMesh.current.position.x <= -30
-    ) {
-      directionX *= -1;
+    if (thisMesh && thisMesh.current) {
+      if (
+        thisMesh.current.position.x >= 30 ||
+        thisMesh.current.position.x <= -30
+      ) {
+        directionX *= -1;
+      }
+      if (
+        thisMesh.current.position.z >= 15 ||
+        thisMesh.current.position.z <= -15
+      ) {
+        directionZ *= -1;
+      }
+      thisMesh.current.position.x += speedX * directionX;
+      thisMesh.current.position.z += speedZ * directionZ;
     }
-    if (
-      thisMesh.current.position.z >= 15 ||
-      thisMesh.current.position.z <= -15
-    ) {
-      directionZ *= -1;
-    }
-    thisMesh.current.position.x += speedX * directionX;
-    thisMesh.current.position.z += speedZ * directionZ;
   });
 
   return <CharModel />;
