@@ -1,9 +1,6 @@
-import React, { useRef } from "react";
-import { Mesh } from "three";
+import React from "react";
 
 export function Floor() {
-  const mesh = useRef<Mesh>();
-
   return (
     <group>
       <mesh
