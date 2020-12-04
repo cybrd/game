@@ -1,4 +1,4 @@
-import React, { createRef } from "react";
+import React, { createRef, Suspense } from "react";
 import { Mesh } from "three";
 import { useFrame } from "react-three-fiber";
 
@@ -12,24 +12,22 @@ import { CharacterDeer } from "./characters/Deer";
 export function Character({ who = null, ...props }) {
   const thisMesh = createRef<Mesh>();
 
-  let CharModel = () => <CharacterDefault ref={thisMesh} {...props} />;
+  let CharModel = CharacterDefault;
   switch (who) {
     case "Red":
-      CharModel = () => <CharacterRed ref={thisMesh} {...props} />;
+      CharModel = CharacterRed;
       break;
     case "Blue":
-      CharModel = () => <CharacterBlue ref={thisMesh} {...props} />;
+      CharModel = CharacterBlue;
       break;
     case "McCree":
-      CharModel = () => <CharacterMcCree ref={thisMesh} {...props} />;
+      CharModel = CharacterMcCree;
       break;
     case "Girl1":
-      CharModel = () => <CharacterGirl1 ref={thisMesh} {...props} />;
+      CharModel = CharacterGirl1;
       break;
     case "Deer":
-      CharModel = () => <CharacterDeer ref={thisMesh} {...props} />;
-      break;
-    default:
+      CharModel = CharacterDeer;
       break;
   }
 
@@ -58,5 +56,9 @@ export function Character({ who = null, ...props }) {
     }
   });
 
-  return <CharModel />;
+  return (
+    <Suspense fallback={<CharacterDefault ref={thisMesh} {...props} />}>
+      <CharModel ref={thisMesh} {...props} />
+    </Suspense>
+  );
 }
