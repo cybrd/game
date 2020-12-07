@@ -1,5 +1,5 @@
 import React, { createRef, Suspense } from "react";
-import { Mesh } from "three";
+import { Mesh, Vector3 } from "three";
 import { useFrame } from "react-three-fiber";
 
 import { CharacterDefault } from "./characters/Default";
@@ -7,9 +7,11 @@ import { CharacterRed } from "./characters/Red";
 import { CharacterBlue } from "./characters/Blue";
 import { CharacterMcCree } from "./characters/McCree";
 import { CharacterGirl1 } from "./characters/Girl1";
-import { CharacterDeer } from "./characters/Deer";
+import { CharacterParrot } from "./characters/Parrot";
+import { CharacterStork } from "./characters/Stork";
+import { CharacterFlamingo } from "./characters/Flamingo";
 
-export function Character({ who = null, ...props }) {
+export function Character({ who = null, side = 1, ...props }) {
   const thisMesh = createRef<Mesh>();
 
   let CharModel = CharacterDefault;
@@ -26,16 +28,22 @@ export function Character({ who = null, ...props }) {
     case "Girl1":
       CharModel = CharacterGirl1;
       break;
-    case "Deer":
-      CharModel = CharacterDeer;
+    case "Parrot":
+      CharModel = CharacterParrot;
+      break;
+    case "Stork":
+      CharModel = CharacterStork;
+      break;
+    case "Flamingo":
+      CharModel = CharacterFlamingo;
       break;
   }
 
-  let directionX = Math.random() > 0.5 ? 1 : -1;
-  let directionZ = Math.random() > 0.5 ? 1 : -1;
+  let directionX = Math.round(Math.random()) ? 1 : -1;
+  let directionZ = Math.round(Math.random()) ? 1 : -1;
 
-  const speedX = Math.random() * 0.4;
-  const speedZ = Math.random() * 0.4;
+  const speedX = Math.random() * 0.1;
+  const speedZ = Math.random() * 0.1;
 
   useFrame(() => {
     if (thisMesh && thisMesh.current) {
@@ -51,10 +59,21 @@ export function Character({ who = null, ...props }) {
       ) {
         directionZ *= -1;
       }
+
       thisMesh.current.position.x += speedX * directionX;
       thisMesh.current.position.z += speedZ * directionZ;
+
+      thisMesh.current.lookAt(
+        new Vector3(
+          thisMesh.current.position.x + speedX * directionX,
+          thisMesh.current.position.y,
+          thisMesh.current.position.z + speedZ * directionZ
+        )
+      );
     }
   });
+
+  props.side = side;
 
   return (
     <Suspense fallback={<CharacterDefault ref={thisMesh} {...props} />}>

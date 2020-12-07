@@ -23,5 +23,5 @@ module.exports = {
     },
     `gatsby-plugin-react-helmet`,
   ],
-  pathPrefix: `/step6`,
+  pathPrefix: `/step7`,
 };
